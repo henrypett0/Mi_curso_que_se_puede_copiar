@@ -1,0 +1,18 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Mi Curso"
+  navbar:
+    left:
+      - text: "Inicio"
+        href: index.qmd
+      - text: "Lecciones"
+        href: lecciones.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    lang: es

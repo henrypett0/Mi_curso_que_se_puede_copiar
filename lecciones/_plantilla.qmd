@@ -1,0 +1,9 @@
+---
+title: "Lección X: TITULO"
+description: "DESCRIPCION BREVE"
+date: "YYYY-MM-DD"
+---
+
+## Sección 1
+
+Escribe tu contenido aquí.

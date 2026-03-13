@@ -1,0 +1,21 @@
+---
+title: "Lección 1: Introducción"
+description: "Primera lección del curso"
+date: "2026-01-01"
+---
+
+## Bienvenida
+
+Este es un ejemplo de lección. Puedes borrar este archivo y crear los tuyos.
+
+### Ejemplo de código
+
+```python
+print("Hola mundo")
+```
+
+### Ejemplo de lista
+
+- Punto uno
+- Punto dos
+- Punto tres

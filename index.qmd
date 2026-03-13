@@ -1,0 +1,5 @@
+---
+title: "Bienvenido"
+---
+
+Este es el sitio web del curso. Navega a **Lecciones** para ver todo el contenido disponible.
