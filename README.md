@@ -211,6 +211,7 @@ tu-curso/
 ├── nueva-leccion.sh      ← Script para crear lecciones rápido
 ├── scripts/
 │   └── validar-lecciones.py  ← Revisa que las lecciones estén bien (no tocar)
+├── imagenes/             ← Opcional: imágenes de tus lecciones
 ├── lecciones/
 │   ├── _plantilla.qmd    ← Plantilla de referencia
 │   ├── leccion-01.qmd    ← Ejemplo (puedes borrarlo)
@@ -249,6 +250,87 @@ print("Hola")
 library(tidyverse)
 ```
 ````
+
+---
+
+## 📷 Cómo poner una imagen en una lección
+
+La línea es esta:
+
+```markdown
+![Texto que describe la imagen](diagrama.png)
+```
+
+El texto entre corchetes sale como **pie de foto** debajo de la imagen, y es lo que
+leen los lectores de pantalla de personas ciegas. Si lo dejas vacío —
+`![](diagrama.png)` — la imagen sale sin pie.
+
+### Paso 1: decide dónde guardar la imagen
+
+**Opción A — junto a la lección.** La más simple si la imagen es de una sola lección:
+
+```
+lecciones/
+├── leccion-02.qmd
+└── diagrama.png
+```
+
+```markdown
+![Mi diagrama](diagrama.png)
+```
+
+**Opción B — en una carpeta `imagenes/`.** Mejor si vas a reusar imágenes en varias
+lecciones:
+
+```
+tu-curso/
+├── imagenes/
+│   └── diagrama.png
+└── lecciones/
+    └── leccion-02.qmd
+```
+
+```markdown
+![Mi diagrama](../imagenes/diagrama.png)
+```
+
+> ⚠️ Fíjate en los `../` del inicio. Significan *"sube una carpeta"*, y hacen falta
+> porque tu lección vive dentro de `lecciones/`. Olvidarlos es el error #1 con
+> imágenes: no falla el deploy, simplemente sale la imagen rota.
+
+### Paso 2: sube la imagen
+
+**Desde GitHub (sin Terminal):** entra a la carpeta → **Add file** → **Upload files**
+→ arrastra la imagen → **Commit changes**.
+
+**Desde la Terminal:** copia la imagen a la carpeta y súbela con tu lección:
+
+```bash
+git add . && git commit -m "agregar imagen" && git push
+```
+
+### Paso 3: cambia el tamaño si hace falta
+
+```markdown
+![Mi diagrama](diagrama.png){width=400}     ← 400 píxeles de ancho
+![Mi diagrama](diagrama.png){width=50%}     ← la mitad del ancho de la página
+```
+
+### Reglas para que no falle
+
+| Regla | Bien ✅ | Mal ❌ |
+|-------|---------|--------|
+| Sin espacios en el nombre | `diagrama-flujo.png` | `diagrama flujo.png` |
+| Sin acentos ni ñ | `graficas.png` | `gráficas.png` |
+| Todo en minúsculas | `foto.png` | `Foto.PNG` |
+| Imágenes ligeras | ~200 KB | 5 MB de la cámara del celular |
+
+> Las mayúsculas importan: si el archivo es `Diagrama.png` y escribes
+> `![](diagrama.png)`, en tu Mac se ve bien pero **en el sitio publicado sale rota**.
+
+Formatos que puedes usar: `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.webp`.
+También puedes dejar `.pdf`, `.csv`, `.xlsx` y `.json` en `lecciones/` sin que la
+validación se queje.
 
 ---
 
@@ -448,6 +530,7 @@ libre, o bórralo si era una copia que no querías.
 | La lección no aparece pero todo salió verde | Revisa que el archivo esté dentro de `lecciones/` y termine en `.qmd` |
 | Mi lección no aparece y empieza con `_` | Los archivos con `_` se ignoran a propósito. Quítale el `_` |
 | El orden de las lecciones está raro | La lista se ordena por `date`. Revisa las fechas |
+| Sale una imagen rota 🖼️ | Revisa los `../` de la ruta y que mayúsculas y acentos del nombre coincidan exactamente. Ver [Cómo poner una imagen](#-cómo-poner-una-imagen-en-una-lección) |
 | No veo los cambios | Recarga con `Cmd+Shift+R` o espera 2 minutos |
 | `./nueva-leccion.sh: Permission denied` | Corre `chmod +x nueva-leccion.sh` una vez |
 
