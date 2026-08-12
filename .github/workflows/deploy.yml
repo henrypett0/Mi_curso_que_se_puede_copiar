@@ -41,6 +41,24 @@ jobs:
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      # R hace falta para las lecciones con bloques ```{r} (los que se
+      # ejecutan). Si tu curso no usa R, puedes borrar estos dos pasos.
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Instalar paquetes de R
+        shell: Rscript {0}
+        run: |
+          install.packages(c(
+            "knitr",
+            "rmarkdown"
+            # Agrega aquí los paquetes que uses en tus lecciones, por ejemplo:
+            # , "ggplot2"
+            # , "dplyr"
+          ))
+
       - name: Render
         uses: quarto-dev/quarto-actions/render@v2
 

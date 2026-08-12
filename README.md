@@ -253,6 +253,73 @@ library(tidyverse)
 
 ---
 
+## 📊 Código de R que se ejecuta
+
+Hay **dos formas** de poner código en una lección, y la diferencia son las llaves:
+
+````markdown
+```r          ← SIN llaves: solo muestra el código, no lo corre
+x <- 2 + 2
+```
+
+```{r}        ← CON llaves: lo ejecuta y muestra el resultado
+x <- 2 + 2
+x
+```
+````
+
+Con llaves obtienes la tabla calculada, la gráfica dibujada, el número real.
+Sin llaves solo se ve el código bonito con colores.
+
+### Si usas un paquete, decláralo
+
+Este es el paso que se olvida. Tu computadora tiene tus paquetes instalados;
+**el servidor de GitHub arranca vacío cada vez**. Si tu lección usa `ggplot2`
+y no lo declaras, el deploy falla con:
+
+```
+there is no package called 'ggplot2'
+```
+
+Para arreglarlo, abre `.github/workflows/deploy.yml`, busca el paso
+**Instalar paquetes de R** y agrega el paquete a la lista:
+
+```r
+install.packages(c(
+  "knitr",
+  "rmarkdown"
+  , "ggplot2"      ← agrégalo así, con la coma al principio
+))
+```
+
+`knitr` y `rmarkdown` ya vienen puestos: son los que hacen funcionar el
+mecanismo, no los borres.
+
+> Cada paquete extra suma tiempo al deploy. Pon solo los que de verdad uses.
+
+### Ocultar el código y dejar solo el resultado
+
+````markdown
+```{r}
+#| echo: false
+plot(1:10)
+```
+````
+
+| Opción | Qué hace |
+|--------|----------|
+| `#| echo: false` | Oculta el código, muestra el resultado |
+| `#| eval: false` | Muestra el código pero no lo corre |
+| `#| warning: false` | Esconde los avisos amarillos de R |
+| `#| message: false` | Esconde los mensajes de carga de paquetes |
+
+### Si no usas R para nada
+
+Puedes borrar los pasos **Setup R** e **Instalar paquetes de R** de
+`.github/workflows/deploy.yml`. El deploy será un par de minutos más rápido.
+
+---
+
 ## 📷 Cómo poner una imagen en una lección
 
 La línea es esta:
@@ -530,6 +597,8 @@ libre, o bórralo si era una copia que no querías.
 | La lección no aparece pero todo salió verde | Revisa que el archivo esté dentro de `lecciones/` y termine en `.qmd` |
 | Mi lección no aparece y empieza con `_` | Los archivos con `_` se ignoran a propósito. Quítale el `_` |
 | El orden de las lecciones está raro | La lista se ordena por `date`. Revisa las fechas |
+| `Unable to locate an installed version of R` | Usaste ```` ```{r} ```` con llaves. Necesitas los pasos de R en el workflow. Ver [Código de R](#-código-de-r-que-se-ejecuta) |
+| `there is no package called '...'` | Falta declarar ese paquete en **Instalar paquetes de R**. Ver [Código de R](#-código-de-r-que-se-ejecuta) |
 | Sale una imagen rota 🖼️ | Revisa los `../` de la ruta y que mayúsculas y acentos del nombre coincidan exactamente. Ver [Cómo poner una imagen](#-cómo-poner-una-imagen-en-una-lección) |
 | No veo los cambios | Recarga con `Cmd+Shift+R` o espera 2 minutos |
 | `./nueva-leccion.sh: Permission denied` | Corre `chmod +x nueva-leccion.sh` una vez |
