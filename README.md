@@ -42,31 +42,89 @@ https://TU_USUARIO.github.io/TU_REPO/
 
 ---
 
-## 📝 Cómo agregar una lección
+## 📝 Cómo subir una lección, paso a paso
 
-### Opción A: Con el script (desde Terminal)
+Hay dos caminos. **Elige uno**, hacen lo mismo.
+
+| | Opción A: Terminal | Opción B: GitHub en el navegador |
+|---|---|---|
+| Necesitas | Tener el repo en tu computadora | Solo el navegador |
+| Ventaja | Detecta errores **antes** de subir | No instalas nada |
+
+---
+
+### Opción A: Con el script (desde la Terminal)
+
+**Paso 1.** Abre la Terminal y entra a la carpeta de tu curso:
+
+```bash
+cd ruta/a/tu-curso
+```
+
+**Paso 2.** Corre el script:
 
 ```bash
 ./nueva-leccion.sh
 ```
 
-Te pide título y descripción, crea el archivo automáticamente. Después:
+**Paso 3.** Te va a preguntar dos cosas. Escribe y presiona Enter en cada una:
+
+```
+📝 Nueva lección #02
+========================
+
+Título: Variables en R
+Descripción breve: Cómo declarar y usar variables
+```
+
+El script elige el número solo (si ya tienes la 01, crea la 02) y pone la fecha de hoy.
+
+**Paso 4.** Revisa el resultado. Si todo está bien verás:
+
+```
+✅ Creada: lecciones/leccion-02.qmd
+
+🔍 Validando lecciones...
+
+✅ 2 lección(es) validada(s) correctamente
+```
+
+Si en vez de eso ves un ❌, **no subas nada todavía**: ve a
+[Guía de errores](#-guía-de-errores-y-cómo-arreglarlos) y arréglalo primero.
+
+**Paso 5.** Escribe tu contenido. Abre `lecciones/leccion-02.qmd` en tu editor y
+reemplaza el texto de ejemplo. **No borres el encabezado de arriba** (lo que está
+entre `---`).
+
+**Paso 6.** Súbelo:
 
 ```bash
-git add . && git commit -m "nueva leccion" && git push
+git add . && git commit -m "agregar leccion 02" && git push
 ```
+
+**Paso 7.** Espera ~2 minutos y recarga tu sitio. La lección ya aparece en la
+página **Lecciones**.
+
+---
 
 ### Opción B: Directo desde GitHub (sin Terminal)
 
-1. Ve a la carpeta `lecciones/` en tu repo
-2. Click en **Add file** → **Create new file**
-3. Nombre: `leccion-02.qmd` (usa números con cero: 01, 02, 03...)
-4. Pega esto y modifica:
+**Paso 1.** Entra a tu repositorio en GitHub y abre la carpeta `lecciones/`.
 
-```yaml
+**Paso 2.** Click en **Add file** → **Create new file**.
+
+**Paso 3.** En el nombre escribe `leccion-02.qmd`.
+
+> Usa el **siguiente número** que te toque, siempre con dos dígitos:
+> `leccion-01.qmd`, `leccion-02.qmd`, … `leccion-10.qmd`.
+> Y no repitas un número que ya exista.
+
+**Paso 4.** Pega esto en el cuadro de texto y cambia lo que está en mayúsculas:
+
+```markdown
 ---
-title: "Lección 2: Nombre de la Lección"
-description: "De qué trata"
+title: "Lección 2: NOMBRE DE LA LECCIÓN"
+description: "DE QUÉ TRATA EN UNA LÍNEA"
 date: "2026-01-15"
 ---
 
@@ -75,8 +133,19 @@ date: "2026-01-15"
 Escribe en Markdown normal.
 ```
 
-5. Click en **Commit changes**
-6. El sitio se actualiza solo en ~2 minutos.
+> La fecha va en formato **año-mes-día**: `2026-01-15`. No uses `15/01/2026`.
+
+**Paso 5.** Baja hasta el final y click en **Commit changes** → **Commit changes**.
+
+**Paso 6.** Ve a la pestaña **Actions** de tu repo. Vas a ver tu cambio corriendo:
+
+- 🟡 Círculo amarillo = está trabajando, espera
+- ✅ Palomita verde = listo, tu lección ya está publicada
+- ❌ Tache rojo = algo está mal en tu lección; el sitio **no** se actualizó
+
+**Paso 7.** Si salió ❌, click en el run rojo → click en el job **Validar lecciones**.
+Ahí aparece el mensaje exacto de qué archivo y qué campo falla. Búscalo en
+[Guía de errores](#-guía-de-errores-y-cómo-arreglarlos), corrígelo y vuelve a hacer commit.
 
 ---
 
@@ -113,9 +182,12 @@ Antes de publicar el sitio, GitHub revisa todas tus lecciones. Si algo está mal
 Se revisa que cada lección:
 
 - Tenga `title`, `description` y `date`, y que no estén vacíos
+- Tenga el encabezado bien abierto y cerrado con `---`
 - Tenga una fecha real en formato `YYYY-MM-DD` (`2026-13-45` falla)
-- Se llame `leccion-NN.qmd`
+- Se llame `leccion-NN.qmd`, con extensión `.qmd`
 - No repita el número de otra lección
+
+Si algo falla, revisa la [Guía de errores](#-guía-de-errores-y-cómo-arreglarlos).
 
 Puedes correr la misma revisión en tu computadora antes de hacer push:
 
@@ -180,14 +252,185 @@ library(tidyverse)
 
 ---
 
-## ❓ Problemas comunes
+## 🚑 Guía de errores y cómo arreglarlos
+
+Cuando la validación falla, verás una lista así:
+
+```
+❌ Validación fallida: 2 problema(s) encontrado(s)
+
+  • lecciones/leccion-02.qmd: falta el campo obligatorio 'description'
+  • lecciones/leccion-04.qmd: el campo 'date' vale "15/03/2026" y debe tener formato YYYY-MM-DD
+```
+
+Cada línea te dice **qué archivo** y **qué está mal**. Búscala aquí abajo.
+
+---
+
+### ❌ `falta el campo obligatorio 'description'`
+
+**Qué pasó:** al encabezado le falta una de las 3 líneas obligatorias
+(puede decir `title`, `description` o `date`).
+
+**Mal** ❌
+```yaml
+---
+title: "Lección 2: Variables"
+date: "2026-01-15"
+---
+```
+
+**Bien** ✅
+```yaml
+---
+title: "Lección 2: Variables"
+description: "Cómo declarar variables"
+date: "2026-01-15"
+---
+```
+
+---
+
+### ❌ `el campo 'description' está vacío`
+
+**Qué pasó:** la línea existe pero no tiene texto después de los dos puntos.
+
+**Mal** ❌ → `description: ""`
+**Bien** ✅ → `description: "Cómo declarar variables"`
+
+---
+
+### ❌ `el campo 'date' ... debe tener formato YYYY-MM-DD`
+
+**Qué pasó:** escribiste la fecha en otro orden o con otros separadores.
+Siempre es **año-mes-día** separado por guiones.
+
+| Mal ❌ | Bien ✅ |
+|--------|---------|
+| `"15/03/2026"` | `"2026-03-15"` |
+| `"15-03-2026"` | `"2026-03-15"` |
+| `"2026/03/15"` | `"2026-03-15"` |
+| `"marzo 15, 2026"` | `"2026-03-15"` |
+| `"2026-3-5"` | `"2026-03-05"` |
+
+---
+
+### ❌ `el campo 'date' ... no es una fecha real del calendario`
+
+**Qué pasó:** el formato está bien pero la fecha no existe. Pasa con
+el mes 13, el día 45, o un 30 de febrero.
+
+**Mal** ❌ → `date: "2026-13-45"`
+**Bien** ✅ → `date: "2026-01-15"`
+
+---
+
+### ❌ `no tiene encabezado YAML (debe empezar con --- en la línea 1)`
+
+**Qué pasó:** el archivo no empieza con `---`, casi siempre porque dejaste una
+línea en blanco arriba.
+
+**Mal** ❌
+```markdown
+
+---
+title: "Lección 2"
+```
+
+**Bien** ✅ — el primer `---` va **pegado hasta arriba**, sin nada antes:
+```markdown
+---
+title: "Lección 2"
+```
+
+---
+
+### ❌ `la primera línea tiene espacios antes o después de los ---`
+
+**Qué pasó:** hay un espacio invisible junto a los guiones (` ---`). Se ve casi
+igual, pero rompe el encabezado.
+
+**Solución:** borra la línea completa y escríbela de nuevo: tres guiones, nada más.
+
+---
+
+### ❌ `el encabezado YAML no está cerrado (falta el --- final)`
+
+**Qué pasó:** pusiste el `---` de arriba pero no el de abajo. Van **dos**.
+
+**Mal** ❌
+```markdown
+---
+title: "Lección 2: Variables"
+description: "Cómo declarar variables"
+date: "2026-01-15"
+
+## Mi contenido
+```
+
+**Bien** ✅
+```markdown
+---
+title: "Lección 2: Variables"
+description: "Cómo declarar variables"
+date: "2026-01-15"
+---
+
+## Mi contenido
+```
+
+---
+
+### ❌ `el nombre del archivo no sigue el patrón leccion-NN.qmd`
+
+**Qué pasó:** el nombre del archivo no es el esperado. Debe ser la palabra
+`leccion`, un guion, dos dígitos, y `.qmd`.
+
+| Mal ❌ | Por qué | Bien ✅ |
+|--------|---------|---------|
+| `leccion2.qmd` | falta el guion | `leccion-02.qmd` |
+| `leccion-2.qmd` | falta el cero | `leccion-02.qmd` |
+| `Leccion-02.qmd` | mayúscula | `leccion-02.qmd` |
+| `lección-02.qmd` | lleva acento | `leccion-02.qmd` |
+| `leccion-02-variables.qmd` | texto de más | `leccion-02.qmd` |
+
+> En GitHub no puedes renombrar con un click: abre el archivo → ícono del lápiz
+> ✏️ → cambia el nombre hasta arriba → **Commit changes**.
+
+---
+
+### ❌ `la extensión debe ser .qmd, no .md`
+
+**Qué pasó:** guardaste la lección como `.md` (o `.txt`, `.Rmd`). Quarto solo
+publica archivos `.qmd`, así que la lección no aparecería en el sitio.
+
+**Solución:** renombra el archivo a `leccion-NN.qmd`. El contenido no cambia.
+
+---
+
+### ❌ `número de lección duplicado (02)`
+
+**Qué pasó:** dos archivos usan el mismo número. Suele pasar al duplicar una
+lección para reusarla, o al crear una desde GitHub sin ver que ya existía.
+
+El mensaje te dice **cuáles dos archivos** son. Renombra uno al siguiente número
+libre, o bórralo si era una copia que no querías.
+
+> Ojo: `leccion-02.qmd` y `leccion-002.qmd` cuentan como el mismo número 2.
+
+---
+
+## ❓ Otros problemas
 
 | Problema | Solución |
 |----------|----------|
 | El sitio no se publica | Settings → Pages → selecciona **GitHub Actions** |
-| La lección no aparece | Revisa que tenga `title`, `description` y `date` |
-| Error en el deploy | Revisa que `---` estén correctos en tu `.qmd` |
+| Salió ❌ en Actions | Abre el run → job **Validar lecciones** → busca el mensaje en la guía de arriba |
+| La lección no aparece pero todo salió verde | Revisa que el archivo esté dentro de `lecciones/` y termine en `.qmd` |
+| Mi lección no aparece y empieza con `_` | Los archivos con `_` se ignoran a propósito. Quítale el `_` |
+| El orden de las lecciones está raro | La lista se ordena por `date`. Revisa las fechas |
 | No veo los cambios | Recarga con `Cmd+Shift+R` o espera 2 minutos |
+| `./nueva-leccion.sh: Permission denied` | Corre `chmod +x nueva-leccion.sh` una vez |
 
 ---
 

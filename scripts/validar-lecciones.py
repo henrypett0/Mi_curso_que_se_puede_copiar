@@ -36,9 +36,14 @@ def leer_frontmatter(ruta):
     except OSError as e:
         return {}, f"no se pudo leer el archivo ({e})"
 
-    # El encabezado debe empezar en la primera línea con ---
+    # El encabezado debe empezar en la primera línea con --- y sin espacios antes
     if not lineas or lineas[0].strip() != "---":
         return {}, "no tiene encabezado YAML (debe empezar con --- en la línea 1)"
+    if lineas[0] != "---":
+        return {}, (
+            "la primera línea tiene espacios antes o después de los --- "
+            "(debe ser exactamente ---)"
+        )
 
     cierre = None
     for i, linea in enumerate(lineas[1:], start=1):
@@ -126,6 +131,18 @@ def main(argv):
         return 0
 
     errores = []
+
+    # Archivos de texto en lecciones/ que no son .qmd: Quarto no los publica,
+    # así que la lección desaparecería en silencio sin avisar.
+    for otro in sorted(CARPETA.iterdir()):
+        if otro.name.startswith("_") or not otro.is_file():
+            continue
+        if otro.suffix.lower() in (".md", ".markdown", ".rmd", ".txt"):
+            errores.append(
+                f"{otro}: la extensión debe ser .qmd, no {otro.suffix} "
+                f"(si no, Quarto no publica la lección)"
+            )
+
     numeros = {}
     for ruta in sorted(rutas):
         errores_archivo, numero = validar_archivo(ruta)
