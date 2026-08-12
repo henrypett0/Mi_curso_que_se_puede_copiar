@@ -41,6 +41,18 @@ EOF
 echo ""
 echo "✅ Creada: $archivo"
 echo ""
+
+# Validar (la misma validación que corre en GitHub antes de publicar)
+echo "🔍 Validando lecciones..."
+echo ""
+if ! python3 scripts/validar-lecciones.py; then
+  echo ""
+  echo "⚠️  Corrige los problemas de arriba antes de hacer push,"
+  echo "    o GitHub rechazará la publicación del sitio."
+  exit 1
+fi
+
+echo ""
 echo "Siguiente paso:"
 echo "  1. Edita $archivo con tu contenido"
 echo "  2. git add . && git commit -m \"agregar leccion $numero\" && git push"

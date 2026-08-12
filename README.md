@@ -100,6 +100,33 @@ date: "YYYY-MM-DD"
 ---
 ```
 
+Además, el archivo debe llamarse `leccion-NN.qmd` (con dos dígitos: `leccion-01.qmd`,
+`leccion-02.qmd`...) y no puede repetir el número de otra lección.
+
+---
+
+## 🔍 Validación automática
+
+Antes de publicar el sitio, GitHub revisa todas tus lecciones. Si algo está mal,
+**no publica** y te dice exactamente qué archivo y qué campo falla.
+
+Se revisa que cada lección:
+
+- Tenga `title`, `description` y `date`, y que no estén vacíos
+- Tenga una fecha real en formato `YYYY-MM-DD` (`2026-13-45` falla)
+- Se llame `leccion-NN.qmd`
+- No repita el número de otra lección
+
+Puedes correr la misma revisión en tu computadora antes de hacer push:
+
+```bash
+python3 scripts/validar-lecciones.py
+```
+
+`./nueva-leccion.sh` ya la corre solo después de crear el archivo.
+
+> Los archivos que empiezan con `_` (como `_plantilla.qmd`) se ignoran.
+
 ---
 
 ## 📁 Estructura del proyecto
@@ -110,6 +137,8 @@ tu-curso/
 ├── index.qmd             ← Página de inicio
 ├── lecciones.qmd         ← Lista automática de lecciones (no tocar)
 ├── nueva-leccion.sh      ← Script para crear lecciones rápido
+├── scripts/
+│   └── validar-lecciones.py  ← Revisa que las lecciones estén bien (no tocar)
 ├── lecciones/
 │   ├── _plantilla.qmd    ← Plantilla de referencia
 │   ├── leccion-01.qmd    ← Ejemplo (puedes borrarlo)
