@@ -1,0 +1,9 @@
+---
+title: "Lección 2: NOMBRE DE LA LECCIÓN"
+description: "DE QUÉ TRATA EN UNA LÍNEA"
+date: "2026-01-15"
+---
+
+## Tu contenido aquí
+
+Escribe en Markdown normal, por ejemplo esta es una prueba de subir una lección
