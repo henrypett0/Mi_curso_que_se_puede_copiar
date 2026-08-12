@@ -28,6 +28,13 @@ CAMPOS_OBLIGATORIOS = ("title", "description", "date")
 PATRON_NOMBRE = re.compile(r"^leccion-(\d{2,})\.qmd$")
 PATRON_FECHA = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
+# Archivos que pueden acompañar a una lección (imágenes, datos) y que no
+# se validan como lecciones.
+EXTENSIONES_ADJUNTAS = (
+    ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp",
+    ".pdf", ".csv", ".xlsx", ".json",
+)
+
 
 def leer_frontmatter(ruta):
     """Devuelve (campos, error). campos es un dict campo -> valor (string)."""
@@ -132,15 +139,24 @@ def main(argv):
 
     errores = []
 
-    # Archivos de texto en lecciones/ que no son .qmd: Quarto no los publica,
-    # así que la lección desaparecería en silencio sin avisar.
+    # Cualquier archivo suelto en lecciones/ que no sea una lección válida:
+    # Quarto no lo publica, así que pasaría desapercibido sin avisar.
     for otro in sorted(CARPETA.iterdir()):
-        if otro.name.startswith("_") or not otro.is_file():
+        if otro.name.startswith(".") or otro.name.startswith("_"):
+            continue
+        if not otro.is_file() or PATRON_NOMBRE.match(otro.name):
+            continue
+        if otro.suffix.lower() in EXTENSIONES_ADJUNTAS:
             continue
         if otro.suffix.lower() in (".md", ".markdown", ".rmd", ".txt"):
             errores.append(
                 f"{otro}: la extensión debe ser .qmd, no {otro.suffix} "
                 f"(si no, Quarto no publica la lección)"
+            )
+        else:
+            errores.append(
+                f"{otro}: no es una lección válida. Renómbralo a leccion-NN.qmd, "
+                f"o ponle _ al principio si no quieres publicarlo"
             )
 
     numeros = {}

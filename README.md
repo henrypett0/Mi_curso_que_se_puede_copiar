@@ -408,6 +408,25 @@ publica archivos `.qmd`, así que la lección no aparecería en el sitio.
 
 ---
 
+### ❌ `no es una lección válida`
+
+**Qué pasó:** hay un archivo suelto dentro de `lecciones/` que no se llama
+`leccion-NN.qmd`. Quarto no lo publica, así que no serviría de nada ahí.
+
+Pasa al subir notas, borradores o archivos de prueba a esa carpeta.
+
+**Tienes tres salidas:**
+
+1. Si **sí** era una lección → renómbrala a `leccion-NN.qmd`
+2. Si **no** era una lección → bórrala, o muévela fuera de `lecciones/`
+3. Si quieres conservarla ahí sin publicarla → ponle `_` al principio
+   (`_borrador.qmd`). Los archivos con `_` se ignoran
+
+> Las imágenes y datos que acompañan a tus lecciones (`.png`, `.jpg`, `.pdf`,
+> `.csv`…) sí puedes dejarlos en la carpeta, no dan error.
+
+---
+
 ### ❌ `número de lección duplicado (02)`
 
 **Qué pasó:** dos archivos usan el mismo número. Suele pasar al duplicar una
