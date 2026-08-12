@@ -1,5 +1,7 @@
 ---
-title: "Bienvenido"
+title: "Bienvenido al sitio web del mono"
 ---
 
-Este es el sitio web del curso. Navega a **Lecciones** para ver todo el contenido disponible.
+Este es el sitio web del mono. Navega a **Lecciones** para ver todo el contenido disponible.
+Puedes siempre despitarme o mandarme un bowl de sushi 
+
