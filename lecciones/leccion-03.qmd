@@ -1,0 +1,9 @@
+---
+title: "Lección 3: NOMBRE DE LA esto es una demo"
+description: "DE QUÉ TRATA EN UNA LÍNEA"
+date: "2026-01-15"
+---
+
+## Tu contenido aquí
+
+Escribe en Markdown normal.
