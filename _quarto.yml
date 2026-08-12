@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "Sitio web del mono"
+  title: "Sitio web de Henry"
   navbar:
     left:
       - text: "Inicio"
