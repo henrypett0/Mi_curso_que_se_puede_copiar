@@ -1,0 +1,45 @@
+---
+title: "Lección 4: Valor futuro con interés compuesto"
+description: "Cómo crece un capital y cómo tabularlo en R"
+date: "2026-01-15"
+---
+
+## Interés compuesto
+
+El valor futuro de un capital $C$ a una tasa $i$ durante $n$ periodos es:
+
+$$VF = C(1+i)^n$$
+
+Vamos a calcularlo en R:
+
+```{r}
+capital <- 10000
+tasa    <- 0.08
+periodos <- 10
+
+vf <- capital * (1 + tasa)^periodos
+round(vf, 2)
+```
+
+## Tabla de crecimiento año con año
+
+```{r}
+tabla <- data.frame(
+  anio  = 0:periodos,
+  saldo = capital * (1 + tasa)^(0:periodos)
+)
+
+tabla$saldo <- round(tabla$saldo, 2)
+knitr::kable(tabla)
+```
+
+## Visualización
+
+```{r}
+#| label: fig-crecimiento
+#| fig-cap: "Crecimiento del capital a 10 años"
+
+plot(tabla$anio, tabla$saldo, type = "b",
+     xlab = "Año", ylab = "Saldo",
+     main = "Interés compuesto al 8%")
+```
