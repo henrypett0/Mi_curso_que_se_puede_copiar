@@ -4,6 +4,9 @@ Crea tu propio sitio web de curso en minutos. Agrega lecciones y el sitio se act
 
 **No necesitas saber programar.** Solo necesitas una cuenta de GitHub.
 
+> 🏗️ ¿Quieres entender cómo está hecho todo esto y construirlo tú desde cero?
+> Lee la [Guía desde cero](GUIA-DESDE-CERO.md). Este README es para el uso diario.
+
 ---
 
 ## 🚀 Cómo crear tu curso (3 pasos)
