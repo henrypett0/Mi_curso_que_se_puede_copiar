@@ -69,7 +69,14 @@ Un "repositorio" (o *repo*) es la carpeta de tu proyecto, guardada en GitHub.
 2. **Repository name:** el nombre de tu curso, sin espacios (ej. `mi-curso-finanzas`)
 3. **Public** ← obligatorio, si es privado GitHub Pages te cobra
 4. Marca **Add a README file**
-5. Click en **Create repository**
+5. **NO** marques "Add .gitignore" ni "Choose a license" — déjalos en *None*
+6. Click en **Create repository**
+
+> **¿Por qué no el .gitignore de ahí?** Ese menú ofrece plantillas por lenguaje
+> (Python, Node, R…) y ninguna es de Quarto. Te llenaría el archivo de decenas de
+> líneas que no aplican, y aun así le faltarían las dos carpetas que sí necesitas
+> ignorar: `_site/` y `.quarto/`. Lo creamos a mano en la Parte 3.4 y son 3 líneas.
+> Si ya lo marcaste, no pasa nada: borra su contenido y pon el de la Parte 3.4.
 
 Ya tienes tu repo. La barra de direcciones dice algo como
 `github.com/tu-usuario/mi-curso-finanzas`.
