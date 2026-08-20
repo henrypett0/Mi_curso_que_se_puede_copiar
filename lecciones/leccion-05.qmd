@@ -17,8 +17,7 @@ Los bloques de abajo son editables: cambia los números, presiona **Run Code** y
 resultado se actualiza. R corre dentro de tu navegador, así que puedes equivocarte
 todas las veces que quieras sin romper nada.
 
-> La primera vez que corras un bloque tarda unos segundos: tu navegador está
-> descargando R. De ahí en adelante es inmediato.
+
 
 ## Experimento 1: ¿cuánto crece tu dinero?
 
