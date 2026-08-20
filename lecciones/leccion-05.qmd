@@ -1,0 +1,106 @@
+---
+title: "Lección 5: Experimenta con el interés compuesto"
+description: "Cambia la tasa y el plazo, y corre el código tú mismo"
+date: "2026-01-20"
+filters:
+  - webr
+webr:
+  show-startup-message: true
+---
+
+## Aquí tú corres el código
+
+En la lección anterior viste el resultado ya calculado. En esta lo calculas **tú**.
+
+Los bloques de abajo son editables: cambia los números, presiona **Run Code** y el
+resultado se actualiza. R corre dentro de tu navegador, así que puedes equivocarte
+todas las veces que quieras sin romper nada.
+
+> La primera vez que corras un bloque tarda unos segundos: tu navegador está
+> descargando R. De ahí en adelante es inmediato.
+
+## Experimento 1: ¿cuánto crece tu dinero?
+
+La fórmula del valor futuro es $VF = C(1+i)^n$, donde $C$ es el capital, $i$ la tasa
+y $n$ los periodos.
+
+Prueba a cambiar `tasa` de `0.08` a `0.12` y vuelve a correrlo.
+
+```{webr-r}
+capital  <- 10000
+tasa     <- 0.08      # <- cambia este número
+periodos <- 10
+
+vf <- capital * (1 + tasa)^periodos
+round(vf, 2)
+```
+
+**Preguntas para probar:**
+
+- ¿Cuánto cambia el resultado si subes la tasa de 8% a 9%? ¿Y de 8% a 16%?
+- ¿Duplicar la tasa duplica el resultado final?
+
+## Experimento 2: año por año
+
+Aquí ves el crecimiento desglosado. Cambia `periodos` a 20 o a 30 y observa la
+forma de la curva.
+
+```{webr-r}
+capital  <- 10000
+tasa     <- 0.08
+periodos <- 10
+
+tabla <- data.frame(
+  anio  = 0:periodos,
+  saldo = round(capital * (1 + tasa)^(0:periodos), 2)
+)
+
+tabla
+```
+
+## Experimento 3: la gráfica
+
+```{webr-r}
+capital  <- 10000
+tasa     <- 0.08      # <- prueba con 0.02, 0.08 y 0.15
+periodos <- 30
+
+anios <- 0:periodos
+saldo <- capital * (1 + tasa)^anios
+
+plot(anios, saldo, type = "l", lwd = 2, col = "steelblue",
+     xlab = "Año", ylab = "Saldo",
+     main = paste0("Crecimiento al ", tasa * 100, "% anual"))
+grid()
+```
+
+Fíjate en algo: con tasas bajas la línea parece casi recta, pero al subir la tasa se
+curva hacia arriba. Esa curva es el interés compuesto trabajando.
+
+## Experimento 4: compara dos estrategias
+
+¿Qué gana más: invertir $10,000 al 8%, o $8,000 al 10%? Córrelo y descúbrelo.
+
+```{webr-r}
+periodos <- 20
+
+opcion_a <- 10000 * (1 + 0.08)^periodos
+opcion_b <-  8000 * (1 + 0.10)^periodos
+
+cat("Opción A ($10,000 al 8%): ", round(opcion_a, 2), "\n")
+cat("Opción B ($8,000 al 10%): ", round(opcion_b, 2), "\n")
+cat("Diferencia:               ", round(abs(opcion_a - opcion_b), 2), "\n")
+```
+
+Cambia `periodos` a 5, a 20 y a 40. **La respuesta no es la misma en todos los
+plazos**, y ahí está la lección: con plazos largos, la tasa pesa más que el capital
+inicial.
+
+## Tu turno
+
+Este bloque está vacío a propósito. Escribe lo que quieras:
+
+```{webr-r}
+# Escribe tu código aquí y presiona Run Code
+
+```
