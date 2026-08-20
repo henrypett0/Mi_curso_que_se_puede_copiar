@@ -323,6 +323,47 @@ Puedes borrar los pasos **Setup R** e **Instalar paquetes de R** de
 
 ---
 
+## 🧪 Código de R que el alumno ejecuta (WebR)
+
+Hay una diferencia grande entre las dos cosas:
+
+| | ```` ```{r} ```` | ```` ```{webr-r} ```` |
+|---|---|---|
+| Dónde corre R | En el servidor, al publicar | En el navegador del alumno |
+| Qué ve el visitante | El resultado congelado | Un editor que puede cambiar y correr |
+
+Para lecciones interactivas, mira [`lecciones/leccion-05.qmd`](lecciones/leccion-05.qmd)
+como ejemplo. El encabezado necesita **tres líneas**:
+
+```yaml
+---
+title: "Lección 5: Mi lección interactiva"
+description: "..."
+date: "2026-01-20"
+engine: markdown      # ← obligatorio, ver abajo
+filters:
+  - webr
+---
+```
+
+Y los bloques se escriben con `webr-r` en lugar de `r`.
+
+> ⚠️ **No olvides `engine: markdown`.** Sin esa línea, el deploy falla con un error
+> confuso sobre Jupyter (`No module named 'yaml'`). Quarto ve el lenguaje `webr-r`,
+> no lo reconoce, e intenta arrancar un kernel de Python para ejecutarlo. Esa línea
+> le dice que el documento no se ejecuta al construir — que es justo el caso, porque
+> corre en el navegador del visitante.
+
+**Lo que debes saber antes de usarlo:**
+
+- La primera celda que alguien corra tarda ~1 minuto: el navegador descarga R. Las
+  siguientes son instantáneas
+- Solo funcionan los paquetes compilados para WebR, no todo CRAN
+- La extensión vive en `_extensions/coatless/webr/` y **debe subirse al repo**
+- `knitr::kable()` no está disponible; usa `data.frame` a secas para mostrar tablas
+
+---
+
 ## 📷 Cómo poner una imagen en una lección
 
 La línea es esta:
@@ -600,6 +641,7 @@ libre, o bórralo si era una copia que no querías.
 | La lección no aparece pero todo salió verde | Revisa que el archivo esté dentro de `lecciones/` y termine en `.qmd` |
 | Mi lección no aparece y empieza con `_` | Los archivos con `_` se ignoran a propósito. Quítale el `_` |
 | El orden de las lecciones está raro | La lista se ordena por `date`. Revisa las fechas |
+| `No module named 'yaml'` / error de Jupyter | Tu lección usa ```` ```{webr-r} ```` y le falta `engine: markdown`. Ver [WebR](#-código-de-r-que-el-alumno-ejecuta-webr) |
 | `Unable to locate an installed version of R` | Usaste ```` ```{r} ```` con llaves. Necesitas los pasos de R en el workflow. Ver [Código de R](#-código-de-r-que-se-ejecuta) |
 | `there is no package called '...'` | Falta declarar ese paquete en **Instalar paquetes de R**. Ver [Código de R](#-código-de-r-que-se-ejecuta) |
 | Sale una imagen rota 🖼️ | Revisa los `../` de la ruta y que mayúsculas y acentos del nombre coincidan exactamente. Ver [Cómo poner una imagen](#-cómo-poner-una-imagen-en-una-lección) |
