@@ -1,13 +1,18 @@
 name: Deploy Quarto Site
 
+# PUBLICACIÓN MANUAL
+#
+# Este sitio NO se publica solo. La validación sí corre en cada subida,
+# para avisarte enseguida si una lección está mal formada, pero el sitio
+# se publica únicamente cuando pulsas el botón:
+#
+#   Actions -> "Deploy Quarto Site" (columna izquierda) -> "Run workflow"
+#
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-  # Botón de encendido manual: pestaña Actions -> "Deploy Quarto Site"
-  # -> botón "Run workflow". Publica el sitio cuando tú lo decidas, sin
-  # tener que cambiar ningún archivo.
   workflow_dispatch:
 
 permissions:
@@ -33,7 +38,8 @@ jobs:
   build-deploy:
     name: Construir y publicar
     needs: validar
-    if: github.event_name != 'pull_request'
+    # Solo publica cuando lo pides con el botón, nunca sola
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

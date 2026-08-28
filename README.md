@@ -177,6 +177,39 @@ Además, el archivo debe llamarse `leccion-NN.qmd` (con dos dígitos: `leccion-0
 
 ---
 
+## 🔴 Publicación manual: el botón de encendido
+
+**Este sitio no se publica solo.** Guardar un cambio no lo pone en internet:
+se publica cuando tú pulsas el botón.
+
+1. Pestaña **Actions**
+2. Columna izquierda → **Deploy Quarto Site** ← no sirve "All workflows"
+3. Botón **Run workflow** → **Run workflow**
+
+Tarda ~1 minuto y medio.
+
+### Qué pasa en cada caso
+
+| Lo que haces | Valida | Publica |
+|---|:---:|:---:|
+| Guardas un cambio (push) | ✅ | ❌ |
+| Abres un Pull Request | ✅ | ❌ |
+| Pulsas **Run workflow** | ✅ | ✅ |
+
+Así, al guardar te enteras enseguida si una lección está mal formada, pero
+decides tú cuándo sale al público. Puedes escribir cinco lecciones y publicarlas
+todas de una vez.
+
+> ⚠️ **El descuido típico:** subes una lección, la ves en verde y das por hecho
+> que ya está publicada. El verde solo dice que está *bien escrita*. Para que se
+> vea en el sitio, hay que pulsar el botón.
+
+**¿Prefieres que se publique solo?** En `.github/workflows/deploy.yml`, cambia
+la línea `if: github.event_name == 'workflow_dispatch'` por
+`if: github.event_name != 'pull_request'`.
+
+---
+
 ## 🔍 Validación automática
 
 Antes de publicar el sitio, GitHub revisa todas tus lecciones. Si algo está mal,
