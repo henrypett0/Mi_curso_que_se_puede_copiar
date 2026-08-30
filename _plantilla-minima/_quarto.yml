@@ -1,0 +1,12 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Nombre de Tu Curso"
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    lang: es

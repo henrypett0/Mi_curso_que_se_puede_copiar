@@ -1,0 +1,140 @@
+name: Publicar el sitio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+
+  # 1) Revisa las lecciones en cada subida. Si algo esta mal, no se publica.
+  revisar:
+    name: Revisar lecciones
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Revisar el encabezado y el nombre de cada leccion
+        run: |
+          python3 - <<'FIN'
+          import re, sys
+          from datetime import datetime
+          from pathlib import Path
+
+          NOMBRE = re.compile(r"^leccion-(\d{2,})\.qmd$")
+          FECHA = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+          ADJUNTOS = (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp",
+                      ".pdf", ".csv", ".xlsx", ".json")
+          carpeta = Path("lecciones")
+          errores, numeros = [], {}
+
+          for f in sorted(carpeta.iterdir()) if carpeta.is_dir() else []:
+              if not f.is_file() or f.name.startswith((".", "_")):
+                  continue
+              m = NOMBRE.match(f.name)
+              if not m:
+                  if f.suffix.lower() not in ADJUNTOS:
+                      errores.append(f"{f}: no es una leccion valida. Renombrala a "
+                                     f"leccion-NN.qmd, o ponle _ delante para ignorarla")
+                  continue
+              numeros.setdefault(int(m.group(1)), []).append(str(f))
+
+              lineas = f.read_text(encoding="utf-8").splitlines()
+              if not lineas or lineas[0] != "---":
+                  errores.append(f"{f}: la primera linea debe ser exactamente ---")
+                  continue
+              cierre = next((i for i, l in enumerate(lineas[1:], 1)
+                             if l.strip() == "---"), None)
+              if cierre is None:
+                  errores.append(f"{f}: falta el --- que cierra el encabezado")
+                  continue
+
+              campos = {}
+              for l in lineas[1:cierre]:
+                  if ":" in l and l[:1] not in (" ", "\t", "-"):
+                      k, _, v = l.partition(":")
+                      campos[k.strip()] = v.strip().strip('"').strip("'")
+
+              for campo in ("title", "description", "date"):
+                  if not campos.get(campo):
+                      errores.append(f"{f}: falta el campo '{campo}' o esta vacio")
+
+              fecha = campos.get("date", "")
+              if fecha:
+                  ok = bool(FECHA.match(fecha))
+                  if ok:
+                      try:
+                          datetime.strptime(fecha, "%Y-%m-%d")
+                      except ValueError:
+                          ok = False
+                  if not ok:
+                      errores.append(f'{f}: la fecha "{fecha}" debe ser real y con '
+                                     f"formato AAAA-MM-DD, por ejemplo 2026-03-15")
+
+          for n, archivos in sorted(numeros.items()):
+              if len(archivos) > 1:
+                  errores.append(f"numero de leccion repetido ({n:02d}): "
+                                 + ", ".join(archivos))
+
+          if errores:
+              print(f"\nRevision fallida: {len(errores)} problema(s)\n")
+              for e in errores:
+                  print("  * " + e)
+              print("\nCada leccion debe empezar asi:")
+              print('---\ntitle: "Leccion N: Titulo"\ndescription: "De que trata"'
+                    '\ndate: "2026-01-15"\n---')
+              sys.exit(1)
+
+          print(f"{len(numeros)} leccion(es) revisadas, todo correcto")
+          FIN
+
+  # 2) Construye y publica. Solo cuando pulsas el boton "Run workflow".
+  publicar:
+    name: Construir y publicar
+    needs: revisar
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      # --- R: solo si tus lecciones llevan bloques ```{r} ---
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Instalar paquetes de R
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::knitr
+            any::rmarkdown
+
+      # --- WebR: solo si tus lecciones llevan bloques ```{webr-r} ---
+      - name: Instalar la extension WebR
+        run: quarto add coatless/quarto-webr --no-prompt
+
+      - name: Construir el sitio
+        run: quarto render
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

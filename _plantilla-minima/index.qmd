@@ -1,0 +1,14 @@
+---
+title: "Nombre de Tu Curso"
+listing:
+  contents: lecciones/*.qmd
+  sort: "date asc"
+  type: table
+  fields: [date, title, description]
+  field-display-names:
+    date: "Fecha"
+    title: "Lección"
+    description: "Descripción"
+---
+
+Bienvenido al curso. Abajo están todas las lecciones disponibles.
